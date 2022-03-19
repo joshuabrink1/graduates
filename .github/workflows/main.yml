@@ -16,7 +16,10 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
         if: ${{ !env.ACT }}
-
+        with:
+          main-branch-name: ${GITHUB_REF#refs/heads/}
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF#refs/heads/}
       - name: Cache node modules
         id: dependency_cache
         uses: actions/cache@v2
@@ -37,9 +40,9 @@ jobs:
         # with:
         #   main-branch-name: 'develop'
         
-      - run: npx nx affected:lint --base=${{ env.NX_HEAD }}
-      - run: npx nx affected:test --base=${{ env.NX_HEAD }}
-      - run: npx nx affected:build --base=${{ env.NX_HEAD }}
+      - run: npx nx affected:lint --base=${GITHUB_REF#refs/heads/}
+      - run: npx nx affected:test --base=${GITHUB_REF#refs/heads/}
+      - run: npx nx affected:build --base=${GITHUB_REF#refs/heads/}
         
 
   # test:
