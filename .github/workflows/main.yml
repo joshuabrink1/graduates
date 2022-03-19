@@ -1,12 +1,11 @@
 name: Nx Standard Use Case
-  
+env:
+  BRANCH_NAME: ${GITHUB_REF#refs/heads/}
 on: 
   push:
     branches: [ develop, feature/ci-tests ]
   pull_request:
     branches: [ develop, feature/ci-tests ]
-# env:
-#   NX_HEAD: feature/ci-tests
 jobs:
   cache:
     runs-on: ubuntu-latest
@@ -19,14 +18,16 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
         if: ${{ !env.ACT }}
-        # with:
-        #   main-branch-name: 'develop'
+        with:
+          main-branch-name: 'develop'
             
       - name: Branch name
-        run: echo running on branch ${GITHUB_REF#refs/heads/}
+        run: echo "running on branch $(echo $BRANCH_NAME)"
+
       - name: Cache node modules
         id: dependency_cache
         uses: actions/cache@v2
+        if: ${{ !env.ACT }}
         env:
           cache-name: cache-node-modules
         with:
@@ -44,29 +45,35 @@ jobs:
         # with:
         #   main-branch-name: 'develop'
         
-      - run: npx nx affected:lint --base=${GITHUB_REF#refs/heads/}
-      - run: npx nx affected:test --base=${GITHUB_REF#refs/heads/}
-      - run: npx nx affected:build --base=${GITHUB_REF#refs/heads/}
+      - run: npx nx affected:lint --base=$BRANCH_NAME
+      - run: npx nx affected:test --base=$BRANCH_NAME
+      - run: npx nx affected:build --base=$BRANCH_NAME
         
-
-  # test:
+  # unit-test:
+  #   needs: cache
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #     - name: Node Setup
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '16'
-  #     - run: npm install
-  #     - name: Derive appropriate SHAs for base and head for `nx affected` commands
-  #       uses: nrwl/nx-set-shas@v2
-  #       if: ${{ !env.ACT }}
-  #       with:
-  #         main-branch-name: 'develop'
-  #     - run: npx nx affected:lint --base=${{ env.NX_HEAD }}
-  #     - run: npx nx affected:test --base=${{ env.NX_HEAD }}
-  #     - run: npx nx affected:build --base=${{ env.NX_HEAD }}
+  #   - run: npx nx affected:test --base=$BRANCH_NAME
+      
+  # e2e-test:
+  #   needs: cache
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - run: npx nx affected:e2e --base=$BRANCH_NAME
+    
+  # lint-test:
+  #   needs: cache
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - run: npx nx affected:lint --base=$BRANCH_NAME
+
+  # build-test:
+  #   needs: cache
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - run: npx nx affected:build --base=$BRANCH_NAME
+
+
   # cypress-e2e-test:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -83,7 +90,7 @@ jobs:
   #     - run: npm install
   #     - run: npx nx affected:e2e --base=${{ env.NX_HEAD }}
   # deploy:
-  #   needs: test
+#   needs: test
 
 
 
