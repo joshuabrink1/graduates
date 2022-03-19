@@ -35,47 +35,47 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
         if: ${{ !env.ACT }}
-        with:
-          main-branch-name: 'develop'
+        # with:
+        #   main-branch-name: 'develop'
         
       - run: npx nx affected:lint --base=${{ env.NX_HEAD }}
       - run: npx nx affected:test --base=${{ env.NX_HEAD }}
       - run: npx nx affected:build --base=${{ env.NX_HEAD }}
         
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Node Setup
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: npm install
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
-        if: ${{ !env.ACT }}
-        with:
-          main-branch-name: 'develop'
-      - run: npx nx affected:lint --base=${{ env.NX_HEAD }}
-      - run: npx nx affected:test --base=${{ env.NX_HEAD }}
-      - run: npx nx affected:build --base=${{ env.NX_HEAD }}
-  cypress-e2e-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
-        if: ${{ !env.ACT }}
-        with:
-          main-branch-name: 'develop'
-      - name: Node Setup
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: npm install
-      - run: npx nx affected:e2e --base=${{ env.NX_HEAD }}
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Node Setup
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '16'
+  #     - run: npm install
+  #     - name: Derive appropriate SHAs for base and head for `nx affected` commands
+  #       uses: nrwl/nx-set-shas@v2
+  #       if: ${{ !env.ACT }}
+  #       with:
+  #         main-branch-name: 'develop'
+  #     - run: npx nx affected:lint --base=${{ env.NX_HEAD }}
+  #     - run: npx nx affected:test --base=${{ env.NX_HEAD }}
+  #     - run: npx nx affected:build --base=${{ env.NX_HEAD }}
+  # cypress-e2e-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Derive appropriate SHAs for base and head for `nx affected` commands
+  #       uses: nrwl/nx-set-shas@v2
+  #       if: ${{ !env.ACT }}
+  #       with:
+  #         main-branch-name: 'develop'
+  #     - name: Node Setup
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '16'
+  #     - run: npm install
+  #     - run: npx nx affected:e2e --base=${{ env.NX_HEAD }}
   # deploy:
   #   needs: test
 
