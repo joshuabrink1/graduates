@@ -13,11 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Derive appropriate SHAs for base and head for `nx affected` commands
-      #   uses: nrwl/nx-set-shas@v2
-      #   if: ${{ !env.ACT }}
-      #   with:
-      #     main-branch-name: ${GITHUB_REF#refs/heads/}
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v2
+        if: ${{ !env.ACT }}
+        with:
+          main-branch-name: 'develop'
+            
       - name: Branch name
         run: echo running on branch ${GITHUB_REF#refs/heads/}
       - name: Cache node modules
