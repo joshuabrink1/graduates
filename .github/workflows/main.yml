@@ -11,13 +11,16 @@ jobs:
   cache:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout develop
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
         if: ${{ !env.ACT }}
-        with:
-          main-branch-name: 'develop'
+        # with:
+        #   main-branch-name: 'develop'
             
       - name: Branch name
         run: echo running on branch ${GITHUB_REF#refs/heads/}
