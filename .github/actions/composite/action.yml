@@ -1,32 +1,40 @@
 name: 'Cache node modules'
-# description: 'Greet someone'
-runs:
-  using: 'composite'
-  steps:
-    - name: Derive appropriate SHAs for base and head for `nx affected` commands
-      uses: nrwl/nx-set-shas@v2
-      if: ${{ !env.ACT }}
-      with:
-        main-branch-name: 'develop'
+description: 'Install and cache node modules'
+on:
+  workflow_call:
+    inputs:
+      act:
+        description: 'Is running on act'
+        required: false
+        default: true
 
-    - name: Cache node modules
-      id: dependency_cache
-      uses: actions/cache@v2
-      if: ${{ !env.ACT }}
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
+jobs:
+  build:
+    runs_on: ubuntu-latest
+    steps:
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        if: inputs.act == 'false'
+        uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: 'develop'
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    - name: Install yarn
-      run: npm install yarn -g
-      shell: bash
+      - name: Cache node modules
+        id: dependency_cache
+        if: inputs.act == 'false'
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
 
-    - name: Install packages
-      run: yarn install --frozen-lockfile
-      shell: bash
+      - name: Use Node.js 16
+        using: actions/setup-node@v2
+        with:
+          node-version: '16'
+          
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install packages
+        run: yarn install --frozen-lockfile
