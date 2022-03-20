@@ -1,5 +1,4 @@
 name: 'Cache node modules'
-description: 'Install and cache node modules'
 on:
   workflow_call:
     inputs:
