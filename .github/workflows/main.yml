@@ -7,7 +7,7 @@ env:
 
 on: 
   push:
-    branches: [ develop, ${{ env.BRANCH_NAME }} ]
+    # branches: [ develop, $BRANCH_NAME  ]
   pull_request:
     branches: [ develop ]
   
