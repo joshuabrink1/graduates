@@ -2,10 +2,6 @@ name: 'Default Test'
 on:
   workflow_call:
     inputs:
-      # act:
-      #   description: 'Is running on act'
-      #   required: true
-      #   type: string
       test:
         description: 'Type of test being run'
         required: true
@@ -48,14 +44,14 @@ jobs:
         run: yarn install --frozen-lockfile
         
       - name: Test all
-        if: type == 'all'
+        if: inputs.type == 'all'
         run: |
           npx nx affected:lint --base=${env.NX_HEAD}
           npx nx affected:test --base=${env.NX_HEAD}
           npx nx affected:build --base=${env.NX_HEAD}
 
       - name: Test affected
-        if: type == 'affected'
+        if: inputs.type == 'affected'
         run: |
           yarn nx run-many --target=lint --all
           yarn nx run-many --target=test --all
