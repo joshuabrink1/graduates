@@ -14,7 +14,7 @@ on:
   
 jobs:
   test-changed:
-    uses: $GITHUB_ACTOR/graduates/.github/workflows/cache.yml@develop
+    uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
     runs-on: ubuntu-latest
     steps:
       - run: npx nx affected:lint --base=$BRANCH_NAME 
