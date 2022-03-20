@@ -23,10 +23,10 @@ jobs:
         with:
           fetch-depth: 0
           
-      # - name: Derive appropriate SHAs for base and head for `nx affected` commands
-      #   uses: nrwl/nx-set-shas@v2
-      #   with:
-      #     main-branch-name: 'develop'
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: 'develop'
 
       - name: Cache node modules
         id: dependency_cache
@@ -52,9 +52,9 @@ jobs:
       - name: Test affected
         if: ${{ inputs.test == 'affected' }}
         run: |
-          yarn nx affected:lint --base=${{ inputs.branch }}
-          yarn nx affected:test --base=${{ inputs.branch }}
-          yarn nx affected:build --base=${{ inputs.branch }}
+          yarn nx affected:lint --base=${{ inputs.branch }} --head=${{ env.NX_HEAD }}
+          yarn nx affected:test --base=${{ inputs.branch }} --head=${{ env.NX_HEAD }}
+          yarn nx affected:build --base=${{ inputs.branch }} --head=${{ env.NX_HEAD }}
 
 
       - name: Test all
