@@ -6,7 +6,8 @@ on:
         description: 'Type of test being run'
         required: true
         type: string
-        
+env:
+  BRANCH_NAME: ${GITHUB_REF#refs/heads/}    
 
 jobs:
   build:
@@ -43,15 +44,15 @@ jobs:
       - name: Install packages
         run: yarn install --frozen-lockfile
         
-      - name: Test all
-        if: ${{ inputs.test == 'all' }}
-        run: |
-          npx nx affected:lint --base=${env.NX_HEAD}
-          npx nx affected:test --base=${env.NX_HEAD}
-          npx nx affected:build --base=${env.NX_HEAD}
-
       - name: Test affected
         if: ${{ inputs.test == 'affected' }}
+        run: |
+          npx nx affected:lint --base=$BRANCH_NAME
+          npx nx affected:test --base=$BRANCH_NAME
+          npx nx affected:build --base=$BRANCH_NAME
+
+      - name: Test all
+        if: ${{ inputs.test == 'all' }}
         run: |
           yarn nx run-many --target=lint --all
           yarn nx run-many --target=test --all
