@@ -13,8 +13,11 @@ on:
   workflow_dispatch:
   
 jobs:
-  test-changed:
+  cache:
     uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
+
+  test-changed:
+    needs: cache
     runs-on: ubuntu-latest
     steps:
       - run: npx nx affected:lint --base=$BRANCH_NAME 
