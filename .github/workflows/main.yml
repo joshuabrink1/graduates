@@ -7,10 +7,9 @@ env:
 
 on: 
   push:
-    branches: [ develop, $BRANCH_NAME ]
+    branches: [ develop, feature/ci-tests ]
   pull_request:
     branches: [ develop ]
-  workflow_dispatch: {}
   
 jobs:
   # cache:
@@ -21,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache node
-        uses: ./.github/actions/composite
+        uses: /.github/actions/composite
       - run: npx nx affected:lint --base=$BRANCH_NAME 
       - run: npx nx affected:test --base=$BRANCH_NAME
       - run: npx nx affected:build --base=$BRANCH_NAME
