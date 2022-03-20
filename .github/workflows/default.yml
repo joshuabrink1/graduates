@@ -6,8 +6,10 @@ on:
         description: 'Type of test being run'
         required: true
         type: string
-env:
-  BRANCH_NAME: ${GITHUB_REF#refs/heads/}    
+      branch:
+        description: 'Branch to use as base'
+        required: false
+        type: string
 
 jobs:
   build:
@@ -47,9 +49,9 @@ jobs:
       - name: Test affected
         if: ${{ inputs.test == 'affected' }}
         run: |
-          npx nx affected:lint --base=$BRANCH_NAME
-          npx nx affected:test --base=$BRANCH_NAME
-          npx nx affected:build --base=$BRANCH_NAME
+          npx nx affected:lint --base=${{ inputs.branch }}
+          npx nx affected:test --base=${{ inputs.branch }}
+          npx nx affected:build --base=${{ inputs.branch }}
 
       - name: Test all
         if: ${{ inputs.test == 'all' }}
