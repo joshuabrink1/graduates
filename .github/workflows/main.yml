@@ -15,14 +15,14 @@ jobs:
   test-affected:
     uses: ./.github/workflows/default.yml
     with:
-      type: 'affected'
+      test: 'affected'
   #   uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
 
 
   test-all:
     uses: ./.github/workflows/default.yml
     with:
-      type: 'all'
+      test: 'all'
 
 
   # unit-test:
