@@ -1,26 +1,34 @@
-name: 'Cache node modules'
+name: 'Default Test'
 on:
   workflow_call:
     inputs:
-      act:
-        description: 'Is running on act'
-        required: false
+      # act:
+      #   description: 'Is running on act'
+      #   required: true
+      #   type: string
+      test-type:
+        description: 'Type of test being run'
+        required: true
         type: string
+        
 
 jobs:
   build:
     name: Generate cache
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout develop
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        if: inputs.act == 'false'
         uses: nrwl/nx-set-shas@v2
         with:
           main-branch-name: 'develop'
 
       - name: Cache node modules
         id: dependency_cache
-        if: inputs.act == 'false'
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -38,3 +46,17 @@ jobs:
 
       - name: Install packages
         run: yarn install --frozen-lockfile
+        
+      - name: Test all
+        if: test-type == 'all'
+        run: |
+          npx nx affected:lint --base=${env.NX_HEAD}
+          npx nx affected:test --base=${env.NX_HEAD}
+          npx nx affected:build --base=${env.NX_HEAD}
+
+      - name: Test affected
+        if: test-type == 'affected'
+        run: |
+          yarn nx run-many --target=lint --all
+          yarn nx run-many --target=test --all
+          yarn nx run-many --target=build --all
