@@ -5,11 +5,12 @@ on:
       act:
         description: 'Is running on act'
         required: false
-        default: true
+        type: string
 
 jobs:
   build:
-    runs_on: ubuntu-latest
+    name: Generate cache
+    runs-on: ubuntu-latest
     steps:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         if: inputs.act == 'false'
