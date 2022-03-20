@@ -1,4 +1,6 @@
 name: 'Default Test'
+
+# Reusable workflow 
 on:
   workflow_call:
     inputs:
@@ -45,13 +47,15 @@ jobs:
 
       - name: Install packages
         run: yarn install --frozen-lockfile
-        
+          
+
       - name: Test affected
         if: ${{ inputs.test == 'affected' }}
         run: |
-          npx nx affected:lint --base=${{ inputs.branch }}
-          npx nx affected:test --base=${{ inputs.branch }}
-          npx nx affected:build --base=${{ inputs.branch }}
+          yarn nx affected:lint --base=${{ inputs.branch }}
+          yarn nx affected:test --base=${{ inputs.branch }}
+          yarn nx affected:build --base=${{ inputs.branch }}
+
 
       - name: Test all
         if: ${{ inputs.test == 'all' }}

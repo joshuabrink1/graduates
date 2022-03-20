@@ -14,9 +14,8 @@ jobs:
     uses: ./.github/workflows/default.yml
     with:
       test: 'affected'
-      branch: ${GITHUB_REF#refs/heads/}
+      branch: ${{ GITHUB_REF#refs/heads/ }}
   #   uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
-
 
   test-all:
     uses: ./.github/workflows/default.yml
