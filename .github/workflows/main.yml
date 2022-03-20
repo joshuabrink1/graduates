@@ -10,15 +10,18 @@ on:
     branches: [ develop, $BRANCH_NAME ]
   pull_request:
     branches: [ develop ]
+  workflow_dispatch: {}
   
 jobs:
-  cache:
-    uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
+  # cache:
+  #     - uses: ./.github/actions/cache
+  #   uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
 
   test-changed:
-    needs: cache
     runs-on: ubuntu-latest
     steps:
+      - name: Cache node
+        uses: ./.github/actions/composite
       - run: npx nx affected:lint --base=$BRANCH_NAME 
       - run: npx nx affected:test --base=$BRANCH_NAME
       - run: npx nx affected:build --base=$BRANCH_NAME
