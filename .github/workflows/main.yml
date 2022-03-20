@@ -13,7 +13,7 @@ on:
   
 jobs:
   cache:
-    uses: ./.github/workflows/cache.yml@main
+    uses: ./.github/workflows/cache.yml
     with:
       act: ${ env.ACT }
   #   uses: joshuabrink1/graduates/.github/workflows/cache.yml@develop
