@@ -4,11 +4,9 @@ name: 'Meta Test'
 on: 
   # workflow_call:
   pull_request:
-    branches: [ develop ]
-    types: [ labeled ]
+    types: [ labeled, opened ]
 
   milestone:
-    # branches: [ develop ]
     types: [ opened ]
 
 jobs:
